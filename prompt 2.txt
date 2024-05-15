@@ -1,0 +1,40 @@
+prompt 2
+
+this code's primary purpose is to make this accessible for screenreaders on both windows and mac
+
+0. check all .form-line class elements and monitor
+0a. replace the "*" character in the field label and change it to "(Required)"
+0b. for example, if the field label is "First Name *" change it to "First Name (Required)"
+0c. Note that the "*" is inside a span class, here is a html example:
+<label class="form-label form-label-top form-label-auto" id="label_3" for="input_3" aria-hidden="false"> First name<span class="form-required">*</span> </label>
+
+1. check to see if theres any .form-line-error elements that gets added when a user interacts with a field like .form-line
+2. if there is a .form-line-error element, set the display to none.
+3. do not show the .form-line-error element until a button submit is clicked.
+4. while it is display none, do these things in the background.
+4a. Move the error message (form-line-error) to adjecent of field label
+4b. here is an example of html:
+before:
+
+<li class="form-line jf-required form-line-error" data-type="control_textbox" id="id_3"><label class="form-label form-label-top form-label-auto" id="label_3" for="input_3" aria-hidden="false"> First name<span class="form-required">*</span> </label> <div id="cid_3" class="form-input-wide jf-required" data-layout="half"> <input type="text" id="input_3" name="q3_firstName" data-type="input-textbox" class="form-textbox validate[required] form-validation-error" data-defaultvalue="" autocomplete="nope" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_3" required="" value=""> <div class="form-error-message" role="alert"><img src="https://cdn.jotfor.ms/images/exclamation-octagon.png"> <span class="error-navigation-message">First name is required.</span><div class="form-error-arrow"><div class="form-error-arrow-inner"></div></div></div></div> </li>
+
+after:
+
+<li class="form-line jf-required form-line-error" data-type="control_textbox" id="id_3"><label class="form-label form-label-top form-label-auto" id="label_3" for="input_3" aria-hidden="false"> First name<span class="form-required">*</span> <div class="form-error-message" role="alert"><img src="https://cdn.jotfor.ms/images/exclamation-octagon.png"> <span class="error-navigation-message">First name is required.</span><div class="form-error-arrow"><div class="form-error-arrow-inner"></div></div></div></label> <div id="cid_3" class="form-input-wide jf-required" data-layout="half"> <input type="text" id="input_3" name="q3_firstName" data-type="input-textbox" class="form-textbox validate[required] form-validation-error" data-defaultvalue="" autocomplete="nope" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_3" required="" value=""> </div> </li>
+
+4c. Update the error message in .error-navigation-message by changing the text inside.
+4d. For example, the default error message is "This field is required." I want it changed to "label + is required." If the label is First Name, the result will be "First Name is required." make sure the aria label reads this message as well.
+4e. This should target every error message that is "This field is required." Leave alone any other type of error message.
+
+5. Do not remove the display:none style from .form-error-message elements until the button submit is clicked.
+5a. this means no .form-error-message should appear when the user is interacting with the field. By default, when you click inside a field and exit out, jotform will think the user did not add anything inside a required field and will add the .form-error-message element for users to see the error message. You also need to remove .form-validation error class if it exists in form-line-error. This will ensure it does not get readded and appear on the form.
+
+6. once the button is clicked, you can readd the .form-validation error class. keep track of which form lines had their form-validation error class remove and readd after.
+
+6a. focus the first invalide field that has .form-line-error input
+
+here's an example of the form:
+
+<form class="jotform-form" onsubmit="return typeof testSubmitFunction !== 'undefined' && testSubmitFunction();" action="https://perkins.jotform.com/submit/241354379657063" method="post" name="form_241354379657063" id="241354379657063" accept-charset="utf-8" autocomplete="off"><input type="hidden" name="formID" value="241354379657063" /><input type="hidden" id="JWTContainer" value="" /><input type="hidden" id="cardinalOrderNumber" value="" /><input type="hidden" id="jsExecutionTracker" name="jsExecutionTracker" value="build-date-1715787319611" /><input type="hidden" id="submitSource" name="submitSource" value="unknown" /><input type="hidden" id="buildDate" name="buildDate" value="1715787319611" /> <div role="main" class="form-all"> <ul class="form-section page-section"> <li id="cid_1" class="form-input-wide" data-type="control_head"> <div class="form-header-group header-large"> <div class="header-text httal htvam"> <h1 id="header_1" class="form-header" data-component="header">Jotform Access test</h1> <div id="subHeader_1" class="form-subHeader">Form ID 241354379657063</div> </div> </div> </li> <li class="form-line jf-required" data-type="control_textbox" id="id_3"><label class="form-label form-label-top form-label-auto" id="label_3" for="input_3" aria-hidden="false"> First name<span class="form-required">*</span> </label> <div id="cid_3" class="form-input-wide jf-required" data-layout="half"> <input type="text" id="input_3" name="q3_firstName" data-type="input-textbox" class="form-textbox validate[required]" data-defaultvalue="" autoComplete="nope" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_3" required="" value="" /> </div> </li> <li class="form-line jf-required" data-type="control_textbox" id="id_4"><label class="form-label form-label-top form-label-auto" id="label_4" for="input_4" aria-hidden="false"> Last name<span class="form-required">*</span> </label> <div id="cid_4" class="form-input-wide jf-required" data-layout="half"> <input type="text" id="input_4" name="q4_typeA4" data-type="input-textbox" class="form-textbox validate[required]" data-defaultvalue="" autoComplete="nope" style="width:310px" size="310" data-component="textbox" aria-labelledby="label_4" required="" value="" /> </div> </li> <li class="form-line jf-required" data-type="control_email" id="id_5"><label class="form-label form-label-top form-label-auto" id="label_5" for="input_5" aria-hidden="false"> Email<span class="form-required">*</span> </label> <div id="cid_5" class="form-input-wide jf-required" data-layout="half"> <span class="form-sub-label-container" style="vertical-align:top"><input type="email" id="input_5" name="q5_email" class="form-textbox validate[required, Email]" data-defaultvalue="" autoComplete="nope" style="width:310px" size="310" data-component="email" aria-labelledby="label_5 sublabel_input_5" required="" value="" /><label class="form-sub-label" for="input_5" id="sublabel_input_5" style="min-height:13px">example@example.com</label></span> </div> </li> <li class="form-line" data-type="control_button" id="id_2"> <div id="cid_2" class="form-input-wide" data-layout="full"> <div data-align="auto" class="form-buttons-wrapper form-buttons-auto jsTest-button-wrapperField"><button id="input_2" type="submit" class="form-submit-button submit-button jf-form-buttons jsTest-submitField" data-component="button" data-content="">Submit</button></div>
+
+optimize this and make it modular as well. return your full code solution to me everytime i ask.
